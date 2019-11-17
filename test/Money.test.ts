@@ -2,8 +2,9 @@ import { Money, Expression, Sum, Bank } from "../src/Money";
 
 test("Multiplication", () => {
     const five: Money = Money.dollar(5);
-    expect(five.times(2).equals(Money.dollar(10))).toBeTruthy();
-    expect(five.times(3).equals(Money.dollar(15))).toBeTruthy();
+    const bank = new Bank();
+    expect(bank.reduce(five.times(2), "USD").equals(Money.dollar(10))).toBeTruthy();
+    expect(bank.reduce(five.times(3), "USD").equals(Money.dollar(15))).toBeTruthy();
 });
 
 test("Equality", () => {
@@ -47,4 +48,13 @@ test("ReduceMoneyDifferentCurrency", () => {
 
 test("IdentityRate", () => {
     expect(new Bank().rate("USD", "USD")).toBe(1);
+});
+
+test("MixedAddition", () => {
+    const fiveBucks = Money.dollar(5);
+    const tenFrancs = Money.franc(10);
+    const bank = new Bank();
+    bank.addRate("CHF", "USD", 2);
+    const result = bank.reduce(fiveBucks.plus(tenFrancs), "USD");
+    expect(result.equals(Money.dollar(10))).toBeTruthy();
 });

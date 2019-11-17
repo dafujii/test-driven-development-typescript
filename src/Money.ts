@@ -1,19 +1,20 @@
 export class Money implements Expression {
     constructor(private _amount: number, private _currency: string) { }
 
-    times(multiplier: number): Money {
-        return new Money(this.amount * multiplier, this.currency);
+    get amount(): number {
+        return this._amount;
     }
 
-    equals(money: Money): boolean {
-        return (
-            this.amount == money.amount &&
-            this.currency === money.currency
-        );
+    get currency(): string {
+        return this._currency;
     }
 
-    plus(addend: Money): Expression {
+    plus(addend: Expression): Expression {
         return new Sum(this, addend);
+    }
+
+    times(multiplier: number): Expression {
+        return new Money(this.amount * multiplier, this.currency);
     }
 
     reduce(bank: Bank, to: string): Money {
@@ -21,12 +22,11 @@ export class Money implements Expression {
         return new Money(this.amount / rate, to);
     }
 
-    get amount(): number {
-        return this._amount;
-    }
-
-    get currency(): string {
-        return this._currency;
+    equals(money: Money): boolean {
+        return (
+            this.amount == money.amount &&
+            this.currency === money.currency
+        );
     }
 
     static dollar(amount: number): Money {
@@ -39,6 +39,7 @@ export class Money implements Expression {
 }
 
 export interface Expression {
+    plus(addend: Expression): Expression;
     reduce(bank: Bank, to: string): Money;
 }
 
@@ -69,11 +70,16 @@ export class Bank {
 }
 
 export class Sum implements Expression {
-    constructor(public augend: Money, public addend: Money) {
+    constructor(public augend: Expression, public addend: Expression) {
+    }
+
+    plus(addend: Expression): Expression {
+        throw "未実装";
     }
 
     reduce(bank: Bank, to: string): Money {
-        const amount = this.augend.amount + this.addend.amount;
+        const amount = this.augend.reduce(bank, to).amount
+            + this.addend.reduce(bank, to).amount;
         return new Money(amount, to);
     }
 }
