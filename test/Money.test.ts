@@ -24,3 +24,7 @@ test("testCurrency", () => {
     expect(Money.dollar(1).currency()).toBe("USD");
     expect(Money.franc(1).currency()).toBe("CHF");
 });
+
+test("testDifferentClassEquality", () => {
+    expect(new Money(10, 'CHF').equals(new Franc(10, 'CHF'))).toBeTruthy();
+});
