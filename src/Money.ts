@@ -1,9 +1,9 @@
 export class Money implements Expression {
+    constructor(private _amount: number, private _currency: string) { }
+
     times(multiplier: number): Money {
         return new Money(this.amount * multiplier, this.currency);
     }
-
-    constructor(private _amount: number, private _currency: string) { }
 
     equals(money: Money): boolean {
         return (
