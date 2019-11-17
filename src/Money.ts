@@ -1,6 +1,6 @@
 export class Money {
     times(multiplier: number): Money {
-        return new Money(this.amount * multiplier, this.currency());
+        return new Money(this.amount * multiplier, this.currency);
     }
 
     constructor(protected amount: number, private _currency: string) { }
@@ -8,11 +8,11 @@ export class Money {
     equals(money: Money): boolean {
         return (
             this.amount == money.amount &&
-            this.currency() === money.currency()
+            this.currency === money.currency
         );
     }
 
-    currency(): string {
+    get currency(): string {
         return this._currency;
     }
 

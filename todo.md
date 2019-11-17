@@ -13,5 +13,5 @@
 - [x] FrancとDollarを比較する
 - [x] 通貨の概念
 - [ ] testFrancMultiplicationを削除する？
-- [ ] get アクセサを使う
+- [x] get アクセサを使う
 - [ ] 文字列の囲み方 ('' と "") の統一

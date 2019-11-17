@@ -21,8 +21,8 @@ test("testFrancMultiplication", () => {
 });
 
 test("testCurrency", () => {
-    expect(Money.dollar(1).currency()).toBe("USD");
-    expect(Money.franc(1).currency()).toBe("CHF");
+    expect(Money.dollar(1).currency).toBe("USD");
+    expect(Money.franc(1).currency).toBe("CHF");
 });
 
 test("testDifferentClassEquality", () => {
