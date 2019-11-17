@@ -3,7 +3,7 @@ export class Money implements Expression {
         return new Money(this.amount * multiplier, this.currency);
     }
 
-    constructor(protected amount: number, private _currency: string) { }
+    constructor(private _amount: number, private _currency: string) { }
 
     equals(money: Money): boolean {
         return (
@@ -13,7 +13,15 @@ export class Money implements Expression {
     }
 
     plus(addend: Money): Expression {
-        return new Money(this.amount + addend.amount, this.currency);
+        return new Sum(this, addend);
+    }
+
+    reduce(to: string): Money {
+        return this;
+    }
+
+    get amount(): number {
+        return this._amount;
     }
 
     get currency(): string {
@@ -30,10 +38,21 @@ export class Money implements Expression {
 }
 
 export interface Expression {
+    reduce(to: string): Money;
 }
 
 export class Bank {
     reduce(source: Expression, to: string): Money {
-        return Money.dollar(10);
+        return source.reduce(to);
+    }
+}
+
+export class Sum implements Expression {
+    constructor(public augend: Money, public addend: Money) {
+    }
+
+    reduce(to: string): Money {
+        const amount = this.augend.amount + this.addend.amount;
+        return new Money(amount, to);
     }
 }

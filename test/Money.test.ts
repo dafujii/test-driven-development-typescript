@@ -1,4 +1,4 @@
-import { Money, Expression, Bank } from "../src/Money";
+import { Money, Expression, Sum, Bank } from "../src/Money";
 
 test("testMultiplication", () => {
     const five: Money = Money.dollar(5);
@@ -24,3 +24,24 @@ test("testSimpleAddition", () => {
     const reduced = bank.reduce(sum, "USD");
     expect(Money.dollar(10).equals(reduced)).toBeTruthy();
 });
+
+test("testPlusReturnSum", () => {
+    const five = Money.dollar(5);
+    const result = five.plus(five);
+    const sum = result;
+    expect(sum.augend.equals(five)).toBeTruthy();
+    expect(sum.addend.equals(five)).toBeTruthy();
+});
+
+test("testReduceSum", () => {
+    const sum = new Sum(Money.dollar(3), Money.dollar(4));
+    const bank = new Bank();
+    const result = bank.reduce(sum, "USD");
+    expect(Money.dollar(7).equals(result)).toBeTruthy();
+});
+
+test("testReduceMoney", () => {
+    const bank = new Bank()
+    const result = bank.reduce(Money.dollar(1), "USD");
+    expect(result.equals(Money.dollar(1))).toBeTruthy();
+})
