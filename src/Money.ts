@@ -16,8 +16,9 @@ export class Money implements Expression {
         return new Sum(this, addend);
     }
 
-    reduce(to: string): Money {
-        return this;
+    reduce(bank: Bank, to: string): Money {
+        const rate = bank.rate(this.currency, to);
+        return new Money(this.amount / rate, to);
     }
 
     get amount(): number {
@@ -38,12 +39,32 @@ export class Money implements Expression {
 }
 
 export interface Expression {
-    reduce(to: string): Money;
+    reduce(bank: Bank, to: string): Money;
 }
 
 export class Bank {
+    rates: Map<string, number> = new Map();
     reduce(source: Expression, to: string): Money {
-        return source.reduce(to);
+        return source.reduce(this, to);
+    }
+
+    private getRateKey(from: string, to: string): string {
+        return `${from}-${to}`;
+    }
+
+    addRate(from: string, to: string, rate: number): void {
+        this.rates.set(this.getRateKey(from, to), rate);
+    }
+
+    rate(from: string, to: string): number {
+        if (from === to) {
+            return 1;
+        }
+        const rate = this.rates.get(this.getRateKey(from, to));
+        if (!rate) {
+            throw "未定義の為替レートです";
+        }
+        return rate;
     }
 }
 
@@ -51,7 +72,7 @@ export class Sum implements Expression {
     constructor(public augend: Money, public addend: Money) {
     }
 
-    reduce(to: string): Money {
+    reduce(bank: Bank, to: string): Money {
         const amount = this.augend.amount + this.addend.amount;
         return new Money(amount, to);
     }

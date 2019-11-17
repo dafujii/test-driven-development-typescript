@@ -25,14 +25,6 @@ test("SimpleAddition", () => {
     expect(Money.dollar(10).equals(reduced)).toBeTruthy();
 });
 
-test("PlusReturnSum", () => {
-    const five = Money.dollar(5);
-    const result = five.plus(five);
-    const sum = result;
-    expect(sum.augend.equals(five)).toBeTruthy();
-    expect(sum.addend.equals(five)).toBeTruthy();
-});
-
 test("ReduceSum", () => {
     const sum = new Sum(Money.dollar(3), Money.dollar(4));
     const bank = new Bank();
@@ -44,4 +36,15 @@ test("ReduceMoney", () => {
     const bank = new Bank()
     const result = bank.reduce(Money.dollar(1), "USD");
     expect(result.equals(Money.dollar(1))).toBeTruthy();
-})
+});
+
+test("ReduceMoneyDifferentCurrency", () => {
+    const bank = new Bank();
+    bank.addRate("CHF", "USD", 2);
+    const result = bank.reduce(Money.franc(2), "USD");
+    expect(Money.dollar(1).equals(result)).toBeTruthy();
+});
+
+test("IdentityRate", () => {
+    expect(new Bank().rate("USD", "USD")).toBe(1);
+});
