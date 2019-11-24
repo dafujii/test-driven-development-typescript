@@ -5,12 +5,13 @@
 - [ ] $5 + $5 が Money を返す
 - [x] Bank.reduce(Money)
 - [x] Moneyを変換して換算を行う
-- [ ] Sum.plus
-- [ ] Expression.times
+- [x] Sum.plus
+- [x] Expression.times
 - [ ] 文字列の囲み方 ('' と "") の統一
   - フォーマッタが動いてない
 - [x] テスト名から"test"を消したい
 - [x] メソッドの順番が気になる。コンストラクタの上にtimesメソッドがある
+- [ ] power-assert-js使ってみたい
 
 ## 消えたToDo
 

@@ -39,6 +39,7 @@ export class Money implements Expression {
 }
 
 export interface Expression {
+    times(multiplier: number): Expression;
     plus(addend: Expression): Expression;
     reduce(bank: Bank, to: string): Money;
 }
@@ -73,8 +74,12 @@ export class Sum implements Expression {
     constructor(public augend: Expression, public addend: Expression) {
     }
 
+    times(multiplier: number): Expression {
+        return new Sum(this.augend.times(multiplier), this.addend.times(multiplier));
+    }
+
     plus(addend: Expression): Expression {
-        throw "未実装";
+        return new Sum(this, addend);
     }
 
     reduce(bank: Bank, to: string): Money {

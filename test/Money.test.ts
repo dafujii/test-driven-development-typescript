@@ -58,3 +58,23 @@ test("MixedAddition", () => {
     const result = bank.reduce(fiveBucks.plus(tenFrancs), "USD");
     expect(result.equals(Money.dollar(10))).toBeTruthy();
 });
+
+test("SumPlusMoney", () => {
+    const fiveBucks = Money.dollar(5);
+    const tenFrancs = Money.franc(10);
+    const bank = new Bank();
+    bank.addRate("CHF", "USD", 2);
+    const sum = new Sum(fiveBucks, tenFrancs).plus(fiveBucks);
+    const result = bank.reduce(sum, "USD");
+    expect(result.equals(Money.dollar(15))).toBeTruthy();
+});
+
+test("SumTimes", () => {
+    const fiveBacks = Money.dollar(5);
+    const tenFrancs = Money.franc(10);
+    const bank = new Bank();
+    bank.addRate("CHF", "USD", 2);
+    const sum = new Sum(fiveBacks, tenFrancs).times(2);
+    const result = bank.reduce(sum, "USD");
+    expect(result.equals(Money.dollar(20))).toBeTruthy();
+});
